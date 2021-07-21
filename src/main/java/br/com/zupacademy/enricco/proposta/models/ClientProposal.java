@@ -29,6 +29,7 @@ public class ClientProposal {
     private UUID id;
     @Document
     @NotNull @NotBlank
+    @Column(unique = true)
     private String document;
     @NotNull @NotBlank
     @Email

@@ -3,6 +3,7 @@ package br.com.zupacademy.enricco.proposta.controller.request;
 import br.com.zupacademy.enricco.proposta.models.ClientProposal;
 import br.com.zupacademy.enricco.proposta.utils.obfuscate.Obfuscator;
 import br.com.zupacademy.enricco.proposta.validations.Document;
+import br.com.zupacademy.enricco.proposta.validations.UniqueValue;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 public class NewClientProposalRequest {
     @Document
     @NotNull @NotBlank
+    @UniqueValue(domainClass = ClientProposal.class,fieldName = "document")
     private String document;
     @NotNull @NotBlank
     @Email
