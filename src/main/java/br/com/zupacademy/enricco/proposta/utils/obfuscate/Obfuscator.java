@@ -67,3 +67,4 @@ public class Obfuscator {
                 + strText.substring(start + maskLength);
     }
 }
+

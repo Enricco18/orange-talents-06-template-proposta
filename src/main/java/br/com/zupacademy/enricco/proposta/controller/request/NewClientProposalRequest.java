@@ -39,6 +39,7 @@ public class NewClientProposalRequest {
                 '}';
     }
 
+
     public String getDocument() {
         return document;
     }

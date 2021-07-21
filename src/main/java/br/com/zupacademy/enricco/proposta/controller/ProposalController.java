@@ -48,3 +48,4 @@ public class ProposalController {
         return ResponseEntity.ok(dto);
     }
 }
+

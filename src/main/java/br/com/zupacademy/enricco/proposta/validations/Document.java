@@ -25,3 +25,4 @@ public @interface Document {
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
+
