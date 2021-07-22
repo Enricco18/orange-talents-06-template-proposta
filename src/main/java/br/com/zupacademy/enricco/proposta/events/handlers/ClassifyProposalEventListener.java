@@ -6,10 +6,14 @@ import br.com.zupacademy.enricco.proposta.repositories.ClientProposalRepository;
 import br.com.zupacademy.enricco.proposta.utils.clients.TransactionClient;
 import br.com.zupacademy.enricco.proposta.utils.clients.request.ProposalToBeClassified;
 import br.com.zupacademy.enricco.proposta.utils.clients.response.ClassifiedProposal;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
+import org.apache.tomcat.util.json.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -20,6 +24,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.net.URI;
 
 @Component
 public class ClassifyProposalEventListener {
@@ -30,17 +35,31 @@ public class ClassifyProposalEventListener {
     @Autowired
     private TransactionClient httpClient;
 
+    @Value("${classify.url}")
+    private String url;
+
     @EventListener
-    public void onApplicationEvent(ClassifyProposalEvent classifyProposalEvent){
+    public void onApplicationEvent(ClassifyProposalEvent classifyProposalEvent) throws JsonProcessingException {
         ClientProposal proposal = classifyProposalEvent.getProposal();
+        ClassifiedProposal classifiedProposal;
         try {
-            ClassifiedProposal classifiedProposal = httpClient.classifyProposal(new ProposalToBeClassified(proposal));
-            ClientProposal classified = classifiedProposal.toModel(repository);
-            repository.save(classified);
+            classifiedProposal = httpClient.classifyProposal(URI.create(url),new ProposalToBeClassified(proposal));
         }catch (FeignException.FeignClientException e){
-            logger.error(e.getMessage());
+
+            if(e.status()!=422){
+                logger.error(e.getMessage());
+                return;
+            }
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            classifiedProposal = objectMapper.readValue( e.contentUTF8(), ClassifiedProposal.class);
+
         }catch (Exception e){
+            logger.error(e.getMessage());
             return;
         }
+
+        ClientProposal classified = classifiedProposal.toModel(repository);
+        repository.save(classified);
     }
 }
