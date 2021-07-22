@@ -1,5 +1,7 @@
 package br.com.zupacademy.enricco.proposta.models;
 
+import br.com.zupacademy.enricco.proposta.models.enums.ClientProposalType;
+import br.com.zupacademy.enricco.proposta.utils.clients.response.PropositionsType;
 import br.com.zupacademy.enricco.proposta.validations.Document;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -41,6 +43,9 @@ public class ClientProposal {
     @NotNull
     @Positive
     private BigDecimal salary;
+    @Enumerated(value = EnumType.STRING)
+    @NotNull
+    private ClientProposalType status;
 
     @Deprecated
     private ClientProposal() {
@@ -56,6 +61,7 @@ public class ClientProposal {
         this.name = name;
         this.address = address;
         this.salary = salary;
+        this.status = ClientProposalType.AGUARDANDO;
     }
 
     public static ClientProposal getOrThrow404(EntityManager manager, UUID client_id){
@@ -93,6 +99,14 @@ public class ClientProposal {
 
     public BigDecimal getSalary() {
         return salary;
+    }
+
+    public ClientProposalType getStatus() {
+        return status;
+    }
+
+    public void setStatus(PropositionsType resultadoSolicitacao) {
+        this.status = ClientProposalType.values()[resultadoSolicitacao.ordinal()];
     }
 }
 

@@ -1,6 +1,7 @@
 package br.com.zupacademy.enricco.proposta.controller.response;
 
 import br.com.zupacademy.enricco.proposta.models.ClientProposal;
+import br.com.zupacademy.enricco.proposta.models.enums.ClientProposalType;
 import br.com.zupacademy.enricco.proposta.validations.Document;
 
 import javax.validation.constraints.Email;
@@ -22,14 +23,16 @@ public class ProposalDTO {
     private String address;
     @NotNull @Positive
     private BigDecimal salary;
+    private ClientProposalType status;
 
     public ProposalDTO(ClientProposal clientProposal) {
         this.id = clientProposal.getId();
         this.document = clientProposal.getDocument();
-        this.address = clientProposal.getDocument();
+        this.address = clientProposal.getAddress();
         this.email = clientProposal.getEmail();
         this.name = clientProposal.getName();
         this.salary = clientProposal.getSalary();
+        this.status = clientProposal.getStatus();
     }
 
     public UUID getId() {
@@ -54,5 +57,9 @@ public class ProposalDTO {
 
     public BigDecimal getSalary() {
         return salary;
+    }
+
+    public ClientProposalType getStatus() {
+        return status;
     }
 }

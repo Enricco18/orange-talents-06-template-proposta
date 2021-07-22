@@ -2,15 +2,23 @@ package br.com.zupacademy.enricco.proposta.controller;
 
 import br.com.zupacademy.enricco.proposta.controller.request.NewClientProposalRequest;
 import br.com.zupacademy.enricco.proposta.controller.response.ProposalDTO;
+import br.com.zupacademy.enricco.proposta.events.ClassifyProposalEvent;
 import br.com.zupacademy.enricco.proposta.models.ClientProposal;
+import br.com.zupacademy.enricco.proposta.repositories.ClientProposalRepository;
+import br.com.zupacademy.enricco.proposta.utils.clients.TransactionClient;
+import br.com.zupacademy.enricco.proposta.utils.clients.request.ProposalToBeClassified;
+import br.com.zupacademy.enricco.proposta.utils.clients.response.ClassifiedProposal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.TransactionManager;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
@@ -20,18 +28,25 @@ import java.util.UUID;
 @RequestMapping("/proposal")
 public class ProposalController {
     private Logger logger = LoggerFactory.getLogger(ProposalController.class);
-
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private ClientProposalRepository repository;
+
+    @Autowired
+    private ApplicationContext context;
+
+
     @PostMapping
-    @Transactional
     public ResponseEntity<?> createProposal(@RequestBody @Valid NewClientProposalRequest request, UriComponentsBuilder builder){
         logger.info("METHOD: POST | PATH: /proposal | ACTION: createProposal | BODY: " + request.toString());
 
         ClientProposal clientProposal = request.toModel();
 
-        entityManager.persist(clientProposal);
+        repository.save(clientProposal);
+
+        context.publishEvent(new ClassifyProposalEvent(this,clientProposal));
 
         URI resourceUrl = clientProposal.buildResourceUrl(builder);
 
