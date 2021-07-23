@@ -52,15 +52,15 @@ public class ProposalController {
 
         return ResponseEntity.created(resourceUrl).body(resourceUrl);
     }
-
     @GetMapping("/{id}")
-    public ResponseEntity<ProposalDTO> getProposal(@PathVariable("id") UUID client_id ){
-        logger.info("METHOD: GET | PATH: /proposal/{id} | ACTION: getProposal | BODY: " + client_id.toString());
-        ClientProposal clientProposal = ClientProposal.getOrThrow404(entityManager,client_id);
+    public ResponseEntity<ProposalDTO> GetProposal(@PathVariable("id") UUID client_id ){
+        logger.info("METHOD: GET | PATH: /proposal/{id} | ACTION: GetProposal | BODY: " + client_id.toString());
+        ClientProposal proposal = ClientProposal.getOrThrow404(entityManager,client_id);
 
-        ProposalDTO dto = new ProposalDTO(clientProposal);
+        ProposalDTO proposalDTO = new ProposalDTO(proposal);
 
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(proposalDTO);
     }
+
 }
 
