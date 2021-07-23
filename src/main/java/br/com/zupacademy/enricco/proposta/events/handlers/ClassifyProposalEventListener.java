@@ -39,6 +39,7 @@ public class ClassifyProposalEventListener {
     private String url;
 
     @EventListener
+    @Async
     public void onApplicationEvent(ClassifyProposalEvent classifyProposalEvent) throws JsonProcessingException {
         ClientProposal proposal = classifyProposalEvent.getProposal();
         ClassifiedProposal classifiedProposal;

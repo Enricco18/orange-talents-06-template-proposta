@@ -2,6 +2,7 @@ package br.com.zupacademy.enricco.proposta.models;
 
 import br.com.zupacademy.enricco.proposta.models.enums.ClientProposalType;
 import br.com.zupacademy.enricco.proposta.utils.clients.response.PropositionsType;
+import br.com.zupacademy.enricco.proposta.utils.obfuscate.Obfuscator;
 import br.com.zupacademy.enricco.proposta.validations.Document;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -46,6 +47,7 @@ public class ClientProposal {
     @Enumerated(value = EnumType.STRING)
     @NotNull
     private ClientProposalType status;
+    private String card;
 
     @Deprecated
     private ClientProposal() {
@@ -105,8 +107,30 @@ public class ClientProposal {
         return status;
     }
 
+    public String getCard() {
+        return card;
+    }
+
     public void setStatus(PropositionsType resultadoSolicitacao) {
         this.status = ClientProposalType.values()[resultadoSolicitacao.ordinal()];
+    }
+
+    public void setCard_id(String card_id) {
+        this.card = card_id;
+    }
+
+    @Override
+    public String toString() {
+        return "ClientProposal{" +
+                "id=" + id +
+                ", document='" + Obfuscator.obfuscateDocument(document) + '\'' +
+                ", email='" + Obfuscator.obfuscateEmail(email)  + '\'' +
+                ", name='" + Obfuscator.obfuscateName(name) + '\'' +
+                ", address='" + Obfuscator.obfuscateAddress(address) + '\'' +
+                ", salary=" + Obfuscator.obfuscateSalary(salary) +
+                ", status=" + status +
+                ", card=" + card +
+                '}';
     }
 }
 

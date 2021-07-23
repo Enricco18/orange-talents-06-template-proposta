@@ -24,6 +24,7 @@ public class ProposalDTO {
     @NotNull @Positive
     private BigDecimal salary;
     private ClientProposalType status;
+    private String card_id;
 
     public ProposalDTO(ClientProposal clientProposal) {
         this.id = clientProposal.getId();
@@ -33,6 +34,11 @@ public class ProposalDTO {
         this.name = clientProposal.getName();
         this.salary = clientProposal.getSalary();
         this.status = clientProposal.getStatus();
+        this.card_id = clientProposal.getCard();
+    }
+
+    public String getCard_id() {
+        return card_id;
     }
 
     public UUID getId() {
