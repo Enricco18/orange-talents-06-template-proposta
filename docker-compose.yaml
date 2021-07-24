@@ -1,5 +1,37 @@
 version: '3.6'
 services:
   app:
-      build: docker
+      build: .
+      ports:
+        - "8080:${PORT}"
+      environment:
+        - PROFILE=prod
+        - SPRING_DATASOURCE_URL=jdbc:mysql://mymymy:3306/${DATABASE}
+        - SPRING_DATASOURCE_USERNAME=${DATABASE_USER}
+        - SPRING_DATASOURCE_PASSWORD=${DATABASE_PASS}
+        - PORT=${PORT}
+        - CARD_DELAY=${CARD_DELAY}
+        - CLASSIFY_URL=${CLASSIFY_URL}
+        - CARD_URL=${CARD_URL}
+      networks:
+        - inet
+      depends_on:
+        - mymymy
+
+  mymymy:
+      image: mysql:latest
+      ports:
+        - 3307:3306
+
+      environment:
+        - MYSQL_RANDOM_ROOT_PASSWORD=true
+        - MYSQL_DATABASE=${DATABASE}
+        - MYSQL_USER=${DATABASE_USER}
+        - MYSQL_PASSWORD=${DATABASE_PASS}
+      networks:
+        - inet
+
+networks:
+      inet:
+        driver: bridge
 
