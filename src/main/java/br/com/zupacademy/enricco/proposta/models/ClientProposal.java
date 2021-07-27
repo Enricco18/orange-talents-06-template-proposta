@@ -47,7 +47,8 @@ public class ClientProposal {
     @Enumerated(value = EnumType.STRING)
     @NotNull
     private ClientProposalType status;
-    private String card;
+    @OneToOne(cascade = CascadeType.ALL)
+    private PaymentCard card;
 
     @Deprecated
     private ClientProposal() {
@@ -107,7 +108,7 @@ public class ClientProposal {
         return status;
     }
 
-    public String getCard() {
+    public PaymentCard getCard() {
         return card;
     }
 
@@ -115,7 +116,7 @@ public class ClientProposal {
         this.status = ClientProposalType.values()[resultadoSolicitacao.ordinal()];
     }
 
-    public void setCard_id(String card_id) {
+    public void setCard_id(PaymentCard card_id) {
         this.card = card_id;
     }
 

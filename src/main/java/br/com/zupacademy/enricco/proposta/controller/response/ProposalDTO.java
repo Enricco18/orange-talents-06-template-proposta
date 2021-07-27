@@ -1,6 +1,7 @@
 package br.com.zupacademy.enricco.proposta.controller.response;
 
 import br.com.zupacademy.enricco.proposta.models.ClientProposal;
+import br.com.zupacademy.enricco.proposta.models.PaymentCard;
 import br.com.zupacademy.enricco.proposta.models.enums.ClientProposalType;
 import br.com.zupacademy.enricco.proposta.validations.Document;
 
@@ -34,7 +35,7 @@ public class ProposalDTO {
         this.name = clientProposal.getName();
         this.salary = clientProposal.getSalary();
         this.status = clientProposal.getStatus();
-        this.card_id = clientProposal.getCard();
+        this.card_id = clientProposal.getCard().getNumber();
     }
 
     public String getCard_id() {

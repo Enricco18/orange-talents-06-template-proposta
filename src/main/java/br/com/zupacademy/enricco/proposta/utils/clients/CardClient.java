@@ -11,4 +11,6 @@ public interface CardClient {
     @RequestMapping(method = RequestMethod.GET)
     public Card getClient(@RequestParam(value="idProposta")String idProposta);
 
+    @GetMapping("/{id}")
+    public Card getClientByCardDigit(@PathVariable("id") String cardNumber);
 }
