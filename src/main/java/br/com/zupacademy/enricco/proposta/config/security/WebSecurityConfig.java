@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -23,12 +24,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/actuator/**").hasRole("admin")
-                .anyRequest().permitAll()
+                .antMatchers("/actuator/**").hasAuthority("SCOPE_admin:read")
+                .antMatchers("/login").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .cors()
-                .disable()
+                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .csrf().disable()
-                .httpBasic();
+                .cors().disable();
     }
 }
