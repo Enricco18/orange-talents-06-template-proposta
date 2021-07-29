@@ -18,7 +18,7 @@ public class Biometric {
     @GeneratedValue
     public Long id;
 
-    @OneToOne
+    @ManyToOne
     private PaymentCard card;
     @NotNull @NotBlank @NotEmpty
     private String base64_biometric;

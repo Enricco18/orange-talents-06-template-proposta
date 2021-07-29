@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class NewClientProposalRequest {
     @Document
@@ -26,8 +27,8 @@ public class NewClientProposalRequest {
     @NotNull @Positive
     private BigDecimal salary;
 
-    public ClientProposal toModel(){
-        return new ClientProposal(this.document,this.email,this.name,this.address,this.salary);
+    public ClientProposal toModel(String user_id){
+        return new ClientProposal(this.document,this.email,this.name,this.address,this.salary, user_id);
     }
 
     @Override

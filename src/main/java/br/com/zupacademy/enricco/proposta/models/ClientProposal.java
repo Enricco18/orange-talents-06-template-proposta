@@ -49,6 +49,7 @@ public class ClientProposal {
     private ClientProposalType status;
     @OneToOne(cascade = CascadeType.ALL)
     private PaymentCard card;
+    private String user_id;
 
     @Deprecated
     private ClientProposal() {
@@ -58,13 +59,15 @@ public class ClientProposal {
                           @NotBlank @Email String email,
                           @NotBlank String name,
                           @NotBlank String address,
-                          @NotNull @Positive BigDecimal salary) {
+                          @NotNull @Positive BigDecimal salary,
+                          @NotNull String user_id) {
         this.document = document;
         this.email = email;
         this.name = name;
         this.address = address;
         this.salary = salary;
         this.status = ClientProposalType.AGUARDANDO;
+        this.user_id = user_id;
     }
 
     public static ClientProposal getOrThrow404(EntityManager manager, UUID client_id){
@@ -110,6 +113,10 @@ public class ClientProposal {
 
     public PaymentCard getCard() {
         return card;
+    }
+
+    public String getUser_id() {
+        return user_id;
     }
 
     public void setStatus(PropositionsType resultadoSolicitacao) {

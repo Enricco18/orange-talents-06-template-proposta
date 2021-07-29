@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -39,10 +41,13 @@ public class ProposalController {
 
 
     @PostMapping
-    public ResponseEntity<?> createProposal(@RequestBody @Valid NewClientProposalRequest request, UriComponentsBuilder builder){
+    public ResponseEntity<?> createProposal(@RequestBody @Valid NewClientProposalRequest request,
+                                            UriComponentsBuilder builder,
+                                            Authentication auth){
         logger.info("METHOD: POST | PATH: /proposal | ACTION: createProposal | BODY: " + request.toString());
 
-        ClientProposal clientProposal = request.toModel();
+        Jwt jwt = (Jwt) auth.getPrincipal();
+        ClientProposal clientProposal = request.toModel(jwt.getSubject());
 
         repository.save(clientProposal);
 

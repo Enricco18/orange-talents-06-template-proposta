@@ -35,7 +35,7 @@ public class ProposalDTO {
         this.name = clientProposal.getName();
         this.salary = clientProposal.getSalary();
         this.status = clientProposal.getStatus();
-        this.card_id = clientProposal.getCard().getNumber();
+        this.card_id = clientProposal.getCard()==null?null:clientProposal.getCard().getNumber();
     }
 
     public String getCard_id() {

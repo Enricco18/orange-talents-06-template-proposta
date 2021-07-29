@@ -2,6 +2,7 @@ package br.com.zupacademy.enricco.proposta.models;
 
 import br.com.zupacademy.enricco.proposta.utils.clients.response.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
@@ -30,9 +31,8 @@ public class PaymentCard {
     private Renegotiation renegotiation;
     @OneToOne(cascade = CascadeType.MERGE)
     private DueDate dueDate;
-    @OneToOne(mappedBy = "card")
-    private Biometric biometric;
     private Integer cardLimit;
+    private String user_id;
 
     @Deprecated
     private PaymentCard() {
@@ -88,6 +88,7 @@ public class PaymentCard {
                                                 this);
                 }).collect(Collectors.toList())
         );
+        this.user_id = idProposta.getUser_id();
     }
 
     public static PaymentCard getOrThrow404(EntityManager manager, String cardDigit) {
@@ -100,5 +101,29 @@ public class PaymentCard {
 
     public String getNumber() {
         return number;
+    }
+
+    public List<Block> getBlocks() {
+        return blocks;
+    }
+
+    public boolean belongsTo(String subject) {
+        String trimUserid = this.user_id.trim();
+        return trimUserid.equals(subject);
+    }
+
+    public boolean isBlocked() {
+        List<Block> blockActive = this.blocks.stream().filter(block -> block.getActive()==true).collect(Collectors.toList());
+        return !blockActive.isEmpty();
+    }
+
+
+    public void addBlock(String remoteAddr, String userAgent) {
+        if(this.isBlocked()){
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,"Cartão já bloqueado.");
+        }
+
+        Block block = new Block(userAgent,remoteAddr,this);
+        this.blocks.add(block);
     }
 }

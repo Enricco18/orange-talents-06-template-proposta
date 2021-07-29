@@ -33,6 +33,13 @@ public class Renegociacao {
         return new Renegotiation(this.id,this.quantidade,this.valor,this.dataDeCriacao,card);
     }
 
+    public Renegociacao(String id, Integer quantidade, BigDecimal valor, LocalDateTime dataDeCriacao) {
+        this.id = id;
+        this.quantidade = quantidade;
+        this.valor = valor;
+        this.dataDeCriacao = dataDeCriacao;
+    }
+
     //    {
 //        "id": "string",
 //            "quantidade": 0,
