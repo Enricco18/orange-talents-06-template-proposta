@@ -1,5 +1,6 @@
 package br.com.zupacademy.enricco.proposta.models;
 
+import br.com.zupacademy.enricco.proposta.models.enums.BlockStatus;
 import br.com.zupacademy.enricco.proposta.utils.clients.response.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ public class PaymentCard {
     private DueDate dueDate;
     private Integer cardLimit;
     private String user_id;
+    private BlockStatus blockStatus;
 
     @Deprecated
     private PaymentCard() {
@@ -88,7 +90,13 @@ public class PaymentCard {
                                                 this);
                 }).collect(Collectors.toList())
         );
+
         this.user_id = idProposta.getUser_id();
+
+        this.blockStatus = BlockStatus.ATIVO;
+        if(this.isBlocked()){
+            this.blockStatus = BlockStatus.BLOQUEADO;
+        }
     }
 
     public static PaymentCard getOrThrow404(EntityManager manager, String cardDigit) {
@@ -118,12 +126,15 @@ public class PaymentCard {
     }
 
 
-    public void addBlock(String remoteAddr, String userAgent) {
+    public Block addBlock(String remoteAddr, String userAgent) {
         if(this.isBlocked()){
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,"Cartão já bloqueado.");
         }
 
         Block block = new Block(userAgent,remoteAddr,this);
         this.blocks.add(block);
+        this.blockStatus = BlockStatus.BLOQUEADO;
+
+        return block;
     }
 }
