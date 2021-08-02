@@ -3,6 +3,7 @@ package br.com.zupacademy.enricco.proposta.controller;
 import br.com.zupacademy.enricco.proposta.controller.request.NewDigitalWalletRequest;
 import br.com.zupacademy.enricco.proposta.models.DigitalWallet;
 import br.com.zupacademy.enricco.proposta.models.PaymentCard;
+import br.com.zupacademy.enricco.proposta.models.enums.DigitalWalletType;
 import br.com.zupacademy.enricco.proposta.utils.clients.CardClient;
 import br.com.zupacademy.enricco.proposta.utils.clients.request.CarteiraDigital;
 import feign.FeignException;
@@ -47,7 +48,7 @@ public class DigitalWalletController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Você não tem permissão pra adicionar uma carteira digital a esse cartão.");
         }
 
-        if(card.hasWalletOfType(request.getType(), manager)){
+        if(card.hasWalletOfType(request.getType())&& request.getType()== DigitalWalletType.PAYPAL){
             return ResponseEntity.unprocessableEntity().body("Já existe uma carteira vinculada desse tipo!");
         }
 

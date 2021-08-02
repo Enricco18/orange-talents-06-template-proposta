@@ -102,11 +102,8 @@ public class PaymentCard {
         return block;
     }
 
-    public boolean hasWalletOfType(DigitalWalletType type, EntityManager manager) {
-        Query query = manager.createQuery("select 1 from DigitalWallet w where w.card.number=:id and w.type=:type");
-        query.setParameter("id", this.number);
-        query.setParameter("type",type);
-        List<?> list = query.getResultList();
+    public boolean hasWalletOfType(DigitalWalletType type) {
+        List<?> list = this.wallets.stream().filter(wallet -> wallet.getType()==type).collect(Collectors.toList());
         return !list.isEmpty();
     }
 }
