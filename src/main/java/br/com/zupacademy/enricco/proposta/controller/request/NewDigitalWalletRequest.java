@@ -3,6 +3,7 @@ package br.com.zupacademy.enricco.proposta.controller.request;
 import br.com.zupacademy.enricco.proposta.models.DigitalWallet;
 import br.com.zupacademy.enricco.proposta.models.PaymentCard;
 import br.com.zupacademy.enricco.proposta.models.enums.DigitalWalletType;
+import br.com.zupacademy.enricco.proposta.utils.obfuscate.Obfuscator;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -27,7 +28,7 @@ public class NewDigitalWalletRequest {
     @Override
     public String toString() {
         return "NewDigitalWalletRequest{" +
-                "email='" + email + '\'' +
+                "email='" + Obfuscator.obfuscateEmail(email) + '\'' +
                 ", type=" + type +
                 '}';
     }
