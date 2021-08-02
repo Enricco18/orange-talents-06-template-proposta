@@ -1,5 +1,6 @@
 package br.com.zupacademy.enricco.proposta.utils.clients;
 
+import br.com.zupacademy.enricco.proposta.utils.clients.request.CarteiraDigital;
 import br.com.zupacademy.enricco.proposta.utils.clients.request.ResponsableSystem;
 import br.com.zupacademy.enricco.proposta.utils.clients.request.AvisoViagem;
 import br.com.zupacademy.enricco.proposta.utils.clients.response.Card;
@@ -21,4 +22,7 @@ public interface CardClient {
 
     @PostMapping("/{id}/bloqueios")
     public String travelNotice(@PathVariable("id") String cardNumber, @RequestBody @Valid AvisoViagem avisoViagem);
+
+    @PostMapping("/{id}/carteiras")
+    public String addDigitalWallet(@PathVariable("id") String cardNumber, @RequestBody @Valid CarteiraDigital carteira);
 }

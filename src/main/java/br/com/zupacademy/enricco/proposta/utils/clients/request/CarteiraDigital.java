@@ -1,28 +1,25 @@
-package br.com.zupacademy.enricco.proposta.utils.clients.response;
+package br.com.zupacademy.enricco.proposta.utils.clients.request;
+
+import br.com.zupacademy.enricco.proposta.models.DigitalWallet;
 
 import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 
 public class CarteiraDigital {
-    private String id;
     private String email;
-    private LocalDateTime associadaEm;
-    private String emissor;
-
-    public String getId() {
-        return id;
-    }
+    private String carteira;
 
     public String getEmail() {
         return email;
     }
 
-    public LocalDateTime getAssociadaEm() {
-        return associadaEm;
+    public String getCarteira() {
+        return carteira;
     }
 
-    public String getEmissor() {
-        return emissor;
+    public CarteiraDigital(DigitalWallet wallet) {
+        this.email = wallet.getEmail();
+        this.carteira = wallet.getType().name();
     }
 
     //    {

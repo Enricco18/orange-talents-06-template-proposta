@@ -1,6 +1,7 @@
 package br.com.zupacademy.enricco.proposta.models;
 
 import br.com.zupacademy.enricco.proposta.models.enums.BlockStatus;
+import br.com.zupacademy.enricco.proposta.models.enums.DigitalWalletType;
 import br.com.zupacademy.enricco.proposta.utils.clients.response.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -99,5 +100,13 @@ public class PaymentCard {
         this.blockStatus = BlockStatus.BLOQUEADO;
 
         return block;
+    }
+
+    public boolean hasWalletOfType(DigitalWalletType type, EntityManager manager) {
+        Query query = manager.createQuery("select 1 from DigitalWallet w where w.card.number=:id and w.type=:type");
+        query.setParameter("id", this.number);
+        query.setParameter("type",type);
+        List<?> list = query.getResultList();
+        return !list.isEmpty();
     }
 }
