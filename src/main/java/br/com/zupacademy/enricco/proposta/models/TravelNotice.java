@@ -39,4 +39,12 @@ public class TravelNotice {
         this.requested_on = requested_on;
         this.card = card;
     }
+
+    public LocalDate getValidUntil() {
+        return validUntil;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
 }

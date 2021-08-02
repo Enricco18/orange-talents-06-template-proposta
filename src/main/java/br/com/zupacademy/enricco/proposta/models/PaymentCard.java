@@ -46,11 +46,7 @@ public class PaymentCard {
                        ClientProposal idProposta,
                        Renegociacao renegociacao,
                        Vencimento vencimento,
-                       Integer limite,
-                       List<Bloqueio> bloqueios,
-                       List<AvisoViagem> avisos,
-                       List<CarteiraDigital> carteiras,
-                       List<Parcela> parcelas) {
+                       Integer limite) {
         this.number = id;
         this.createdOn = emitidoEm;
         this.holder = titular;
@@ -58,39 +54,6 @@ public class PaymentCard {
         this.renegotiation = renegociacao==null? null:renegociacao.toModel(this);
         this.dueDate = vencimento== null? null:vencimento.toModel(this);
         this.cardLimit = limite;
-        this.blocks.addAll(
-                bloqueios.stream().map(bloqueio -> {
-                    return new Block(   bloqueio.getId(),
-                                        bloqueio.getBloqueadoEm(),
-                                        bloqueio.getSistemaResponsavel(),
-                                        bloqueio.getAtivo(),this);
-                }).collect(Collectors.toList())
-        );
-        this.notices.addAll(
-                avisos.stream().map(aviso -> {
-                    return new TravelNotice(    aviso.getValidoAte(),
-                                                aviso.getDestino(),
-                                                this);
-                }).collect(Collectors.toList())
-        );
-        this.wallets.addAll(
-                carteiras.stream().map(carteira -> {
-                    return new DigitalWallet(   carteira.getId(),
-                                                carteira.getEmail(),
-                                                carteira.getAssociadaEm(),
-                                                carteira.getEmissor(),
-                                                this);
-                }).collect(Collectors.toList())
-        );
-        this.parcels.addAll(
-                parcelas.stream().map(parcela -> {
-                    return new Parcel(          parcela.getId(),
-                                                parcela.getQuantidade(),
-                                                parcela.getValor(),
-                                                this);
-                }).collect(Collectors.toList())
-        );
-
         this.user_id = idProposta.getUser_id();
 
         this.blockStatus = BlockStatus.ATIVO;

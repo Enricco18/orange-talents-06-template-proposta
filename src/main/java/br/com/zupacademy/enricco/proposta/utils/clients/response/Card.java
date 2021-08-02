@@ -14,10 +14,6 @@ public class Card {
     private LocalDateTime emitidoEm;
     private String titular;
     private UUID idProposta;
-    private List<Bloqueio> bloqueios;
-    private List<AvisoViagem> avisos;
-    private List<CarteiraDigital> carteiras;
-    private List<Parcela> parcelas;
     private Renegociacao renegociacao;
     private Vencimento vencimento;
     private Integer limite;
@@ -49,22 +45,6 @@ public class Card {
         return idProposta;
     }
 
-    public List<Bloqueio> getBloqueios() {
-        return bloqueios;
-    }
-
-    public List<AvisoViagem> getAvisos() {
-        return avisos;
-    }
-
-    public List<CarteiraDigital> getCarteiras() {
-        return carteiras;
-    }
-
-    public List<Parcela> getParcelas() {
-        return parcelas;
-    }
-
     public Renegociacao getRenegociacao() {
         return renegociacao;
     }
@@ -79,6 +59,6 @@ public class Card {
 
     public PaymentCard toModel(ClientProposal proposal) {
 
-        return new PaymentCard(this.id,this.emitidoEm,this.titular,proposal,this.renegociacao,this.vencimento,this.limite,this.bloqueios,this.avisos,this.carteiras,this.parcelas);
+        return new PaymentCard(this.id,this.emitidoEm,this.titular,proposal,this.renegociacao,this.vencimento,this.limite);
     }
 }

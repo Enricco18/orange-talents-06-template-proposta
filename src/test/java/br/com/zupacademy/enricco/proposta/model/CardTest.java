@@ -3,7 +3,7 @@ package br.com.zupacademy.enricco.proposta.model;
 import br.com.zupacademy.enricco.proposta.models.Block;
 import br.com.zupacademy.enricco.proposta.models.ClientProposal;
 import br.com.zupacademy.enricco.proposta.models.PaymentCard;
-import br.com.zupacademy.enricco.proposta.models.Renegotiation;
+import br.com.zupacademy.enricco.proposta.utils.clients.request.AvisoViagem;
 import br.com.zupacademy.enricco.proposta.utils.clients.response.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
@@ -36,11 +36,7 @@ public class CardTest {
                                                     proposal,
                                                     null,
                                                     null,
-                                                    1000,
-                                                    new ArrayList<Bloqueio>(),
-                                                    new ArrayList<AvisoViagem>(),
-                                                    new ArrayList<CarteiraDigital>(),
-                                                    new ArrayList<Parcela>());
+                                                    1000);
 
 
 
@@ -68,7 +64,7 @@ public class CardTest {
         for (int i=0; i<paymentCard.getBlocks().size();i++){
             Block block = paymentCard.getBlocks().get(i);
 
-            Assert.assertTrue(block.getBlockedBy().equals(blocks[i].getBlockedBy()));
+            Assert.assertTrue(block.getRequestedFromAgent().equals(blocks[i].getRequestedFromAgent()));
         }
     }
 

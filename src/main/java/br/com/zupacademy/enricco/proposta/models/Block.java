@@ -11,8 +11,9 @@ public class Block {
     @Id
     @Column(name = "ID", nullable = false)
     private String id;
-    private LocalDateTime blockedOn;
-    private String blockedBy;
+    private String requestedFromAgent;
+    private String requestedFromIp;
+    private LocalDateTime requested_on;
     private Boolean active;
     @ManyToOne
     private PaymentCard card;
@@ -21,19 +22,13 @@ public class Block {
     private Block() {
     }
 
-    public Block(String id, LocalDateTime blockedOn, String system, Boolean active, PaymentCard card) {
-        this.id = id;
-        this.blockedOn = blockedOn;
-        this.blockedBy = system;
-        this.active = active;
-        this.card = card;
-    }
 
     public Block(String useragent,String ip, PaymentCard card) {
         this.id = UUID.randomUUID().toString();
-        this.blockedOn = LocalDateTime.now();
+        this.requested_on = LocalDateTime.now();
         this.active = true;
-        this.blockedBy = useragent+" "+ip;
+        this.requestedFromIp = ip;
+        this.requestedFromAgent= useragent;
         this.card = card;
     }
 
@@ -41,16 +36,20 @@ public class Block {
         return id;
     }
 
-    public LocalDateTime getBlockedOn() {
-        return blockedOn;
-    }
-
-    public String getBlockedBy() {
-        return blockedBy;
-    }
-
     public PaymentCard getCard() {
         return card;
+    }
+
+    public String getRequestedFromAgent() {
+        return requestedFromAgent;
+    }
+
+    public String getRequestedFromIp() {
+        return requestedFromIp;
+    }
+
+    public LocalDateTime getRequested_on() {
+        return requested_on;
     }
 
     public Boolean getActive() {
@@ -66,11 +65,11 @@ public class Block {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Block block = (Block) o;
-        return Objects.equals(id, block.id) && Objects.equals(blockedOn, block.blockedOn) && Objects.equals(blockedBy, block.blockedBy) && Objects.equals(active, block.active) && Objects.equals(card, block.card);
+        return Objects.equals(id, block.id) && Objects.equals(requestedFromAgent, block.requestedFromAgent) && Objects.equals(requestedFromIp, block.requestedFromIp) && Objects.equals(requested_on, block.requested_on) && Objects.equals(active, block.active) && Objects.equals(card, block.card);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, blockedOn, blockedBy, active, card);
+        return Objects.hash(id, requestedFromAgent, requestedFromIp, requested_on, active, card);
     }
 }

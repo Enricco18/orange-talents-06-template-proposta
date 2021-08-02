@@ -1,11 +1,12 @@
 package br.com.zupacademy.enricco.proposta.utils.clients;
 
 import br.com.zupacademy.enricco.proposta.utils.clients.request.ResponsableSystem;
+import br.com.zupacademy.enricco.proposta.utils.clients.request.AvisoViagem;
 import br.com.zupacademy.enricco.proposta.utils.clients.response.Card;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+import javax.validation.Valid;
 
 @FeignClient(name = "card", url = "${card.url}")
 public interface CardClient {
@@ -17,4 +18,7 @@ public interface CardClient {
 
     @PostMapping("/{id}/bloqueios")
     public String blockCard(@PathVariable("id") String cardNumber, @RequestBody ResponsableSystem responsableSystem);
+
+    @PostMapping("/{id}/bloqueios")
+    public String travelNotice(@PathVariable("id") String cardNumber, @RequestBody @Valid AvisoViagem avisoViagem);
 }

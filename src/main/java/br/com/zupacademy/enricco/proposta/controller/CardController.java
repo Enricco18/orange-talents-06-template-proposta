@@ -6,6 +6,7 @@ import br.com.zupacademy.enricco.proposta.models.PaymentCard;
 import br.com.zupacademy.enricco.proposta.models.TravelNotice;
 import br.com.zupacademy.enricco.proposta.utils.clients.CardClient;
 import br.com.zupacademy.enricco.proposta.utils.clients.request.ResponsableSystem;
+import br.com.zupacademy.enricco.proposta.utils.clients.request.AvisoViagem;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,9 @@ public class CardController {
     @Autowired
     private CardClient client;
 
+    @Value("${spring.application.name}")
+    private String appName;
+
     @PostMapping("/{id}/block")
     @Transactional
     public ResponseEntity<?> blockCard(@PathVariable("id") String cardDigit,
@@ -47,7 +51,7 @@ public class CardController {
         Block block = card.addBlock(request.getRemoteAddr(),request.getHeader("user-agent"));
 
         try {
-            client.blockCard(card.getNumber(),new ResponsableSystem(block));
+            client.blockCard(card.getNumber(),new ResponsableSystem(appName));
         }catch (FeignException e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Não foi possível bloquear o cartão");
         }
@@ -72,6 +76,12 @@ public class CardController {
         }
 
         TravelNotice notice = requestBody.toModel(request.getRemoteAddr(),request.getHeader("user-agent"),card);
+
+        try {
+            client.travelNotice(card.getNumber(),new AvisoViagem(notice));
+        }catch (FeignException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Não foi possível criar aviso viagem. Falha na comunicação com sistema legado.");
+        }
 
         manager.persist(notice);
 
