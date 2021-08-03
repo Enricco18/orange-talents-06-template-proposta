@@ -2,11 +2,14 @@ package br.com.zupacademy.enricco.proposta.models;
 
 import br.com.zupacademy.enricco.proposta.models.enums.ClientProposalType;
 import br.com.zupacademy.enricco.proposta.utils.clients.response.PropositionsType;
+import br.com.zupacademy.enricco.proposta.utils.crypto.Encryptor;
 import br.com.zupacademy.enricco.proposta.utils.obfuscate.Obfuscator;
 import br.com.zupacademy.enricco.proposta.validations.Document;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -30,7 +33,6 @@ public class ClientProposal {
     )
     @Type(type = "uuid-char")
     private UUID id;
-    @Document
     @NotNull @NotBlank
     @Column(unique = true)
     private String document;
@@ -60,8 +62,9 @@ public class ClientProposal {
                           @NotBlank String name,
                           @NotBlank String address,
                           @NotNull @Positive BigDecimal salary,
-                          @NotNull String user_id) {
-        this.document = document;
+                          @NotNull String user_id,
+                          Encryptor crypto) {
+        this.document = crypto.encode(document);
         this.email = email;
         this.name = name;
         this.address = address;

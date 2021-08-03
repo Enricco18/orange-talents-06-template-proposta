@@ -1,6 +1,7 @@
 package br.com.zupacademy.enricco.proposta.controller.request;
 
 import br.com.zupacademy.enricco.proposta.models.ClientProposal;
+import br.com.zupacademy.enricco.proposta.utils.crypto.Encryptor;
 import br.com.zupacademy.enricco.proposta.utils.obfuscate.Obfuscator;
 import br.com.zupacademy.enricco.proposta.validations.Document;
 import br.com.zupacademy.enricco.proposta.validations.UniqueValue;
@@ -15,7 +16,7 @@ import java.util.UUID;
 public class NewClientProposalRequest {
     @Document
     @NotNull @NotBlank
-    @UniqueValue(domainClass = ClientProposal.class,fieldName = "document")
+    @UniqueValue(domainClass = ClientProposal.class,fieldName = "document",encryptor = true)
     private String document;
     @NotNull @NotBlank
     @Email
@@ -27,8 +28,10 @@ public class NewClientProposalRequest {
     @NotNull @Positive
     private BigDecimal salary;
 
-    public ClientProposal toModel(String user_id){
-        return new ClientProposal(this.document,this.email,this.name,this.address,this.salary, user_id);
+    public ClientProposal toModel(String user_id, Encryptor encryptor){
+        return new ClientProposal(this.document,this.email,this.name,this.address,this.salary, user_id,encryptor);
+        //ou
+        //return new ClientProposal(encryptor.encode(this.document, blábláblá...)
     }
 
     @Override

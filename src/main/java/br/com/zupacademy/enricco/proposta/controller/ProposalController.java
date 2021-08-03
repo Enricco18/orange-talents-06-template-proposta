@@ -8,6 +8,7 @@ import br.com.zupacademy.enricco.proposta.repositories.ClientProposalRepository;
 import br.com.zupacademy.enricco.proposta.utils.clients.TransactionClient;
 import br.com.zupacademy.enricco.proposta.utils.clients.request.ProposalToBeClassified;
 import br.com.zupacademy.enricco.proposta.utils.clients.response.ClassifiedProposal;
+import br.com.zupacademy.enricco.proposta.utils.crypto.Crypto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ public class ProposalController {
     @Autowired
     private ApplicationContext context;
 
+    @Autowired
+    private Crypto crypto;
+
 
     @PostMapping
     public ResponseEntity<?> createProposal(@RequestBody @Valid NewClientProposalRequest request,
@@ -47,7 +51,7 @@ public class ProposalController {
         logger.info("METHOD: POST | PATH: /proposal | ACTION: createProposal | BODY: " + request.toString());
 
         Jwt jwt = (Jwt) auth.getPrincipal();
-        ClientProposal clientProposal = request.toModel(jwt.getSubject());
+        ClientProposal clientProposal = request.toModel(jwt.getSubject(), crypto);
 
         repository.save(clientProposal);
 
@@ -62,7 +66,7 @@ public class ProposalController {
         logger.info("METHOD: GET | PATH: /proposal/{id} | ACTION: GetProposal | BODY: " + client_id.toString());
         ClientProposal proposal = ClientProposal.getOrThrow404(entityManager,client_id);
 
-        ProposalDTO proposalDTO = new ProposalDTO(proposal);
+        ProposalDTO proposalDTO = new ProposalDTO(proposal,crypto);
 
         return ResponseEntity.ok(proposalDTO);
     }

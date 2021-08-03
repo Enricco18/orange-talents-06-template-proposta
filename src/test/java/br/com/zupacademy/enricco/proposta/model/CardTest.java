@@ -5,6 +5,8 @@ import br.com.zupacademy.enricco.proposta.models.ClientProposal;
 import br.com.zupacademy.enricco.proposta.models.PaymentCard;
 import br.com.zupacademy.enricco.proposta.utils.clients.request.AvisoViagem;
 import br.com.zupacademy.enricco.proposta.utils.clients.response.*;
+import br.com.zupacademy.enricco.proposta.utils.crypto.Crypto;
+import br.com.zupacademy.enricco.proposta.utils.crypto.Encryptor;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -24,12 +26,14 @@ public class CardTest {
 
     @BeforeAll
     public static void setup(){
+        Encryptor encryptor = new Crypto();
         proposal = new ClientProposal(   "360.109.987-09",
                                                         "anonimo@lindinho.com",
                                                         "Naruto",
                                                         "Vila da folha, Rua da luta, 64",
                                                         BigDecimal.valueOf(5000.00),
-                                                        owner_id);
+                                                        owner_id,
+                                                        encryptor);
         paymentCard = new PaymentCard(  "1",
                                                     LocalDateTime.now(),
                                                     "Naruto",

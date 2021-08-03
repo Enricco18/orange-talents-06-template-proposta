@@ -1,5 +1,7 @@
 package br.com.zupacademy.enricco.proposta.validations;
 
+import br.com.zupacademy.enricco.proposta.utils.crypto.Encryptor;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
@@ -18,4 +20,6 @@ public @interface UniqueValue {
     String fieldName();
 
     Class<?> domainClass();
+
+    boolean encryptor();
 }

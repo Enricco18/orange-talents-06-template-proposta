@@ -3,6 +3,7 @@ package br.com.zupacademy.enricco.proposta.controller.response;
 import br.com.zupacademy.enricco.proposta.models.ClientProposal;
 import br.com.zupacademy.enricco.proposta.models.PaymentCard;
 import br.com.zupacademy.enricco.proposta.models.enums.ClientProposalType;
+import br.com.zupacademy.enricco.proposta.utils.crypto.Encryptor;
 import br.com.zupacademy.enricco.proposta.validations.Document;
 
 import javax.validation.constraints.Email;
@@ -27,9 +28,9 @@ public class ProposalDTO {
     private ClientProposalType status;
     private String card_id;
 
-    public ProposalDTO(ClientProposal clientProposal) {
+    public ProposalDTO(ClientProposal clientProposal, Encryptor encryptor) {
         this.id = clientProposal.getId();
-        this.document = clientProposal.getDocument();
+        this.document = encryptor.decode(clientProposal.getDocument());
         this.address = clientProposal.getAddress();
         this.email = clientProposal.getEmail();
         this.name = clientProposal.getName();
